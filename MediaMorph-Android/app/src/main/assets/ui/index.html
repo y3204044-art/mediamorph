@@ -1,0 +1,2465 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediaMorph Studio Pro — מערכת חכמה לסריקה, אופטימיזציה והמרת מדיה</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-app: #f4f6fb;
+      --bg-surface: #ffffff;
+      --bg-elevated: #f8fafd;
+      --bg-subtle: #eef2f9;
+      --bg-glass: rgba(255, 255, 255, 0.88);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-soft: #e2e8f0;
+      --border-strong: #cbd5e1;
+
+      --blue: #1a73e8;
+      --blue-dark: #1557b0;
+      --blue-tint: #e8f0fe;
+      --green: #0d9488;
+      --emerald: #16a34a;
+      --emerald-tint: #dcfce7;
+      --amber: #d97706;
+      --amber-tint: #fef3c7;
+      --red: #dc2626;
+      --red-tint: #fee2e2;
+      --purple: #7c3aed;
+      --purple-tint: #f3e8ff;
+      --cyan: #0284c7;
+      --cyan-tint: #e0f2fe;
+
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 13px;
+      --radius-pill: 9999px;
+
+      --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
+      --shadow-md: 0 12px 32px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 24px 56px rgba(15, 23, 42, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Heebo', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--bg-app);
+      color: var(--text-primary);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      direction: rtl;
+      text-align: right;
+      user-select: none;
+    }
+
+    .num, .mono {
+      font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      display: inline-block;
+    }
+
+    /* סרגל עליון מזוגג בסגנון macOS Sequoia / Google Studio */
+    .topbar {
+      height: 66px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      flex-shrink: 0;
+      z-index: 30;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      padding: 2px;
+      background: linear-gradient(135deg, #00f2fe 0%, #ff0844 35%, #f6d365 70%, #7c3aed 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.32), 0 2px 8px rgba(6, 182, 212, 0.28);
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .brand-mark:hover {
+      transform: scale(1.06) rotate(-2deg);
+      box-shadow: 0 8px 25px rgba(236, 72, 153, 0.42), 0 4px 12px rgba(6, 182, 212, 0.35);
+    }
+    .brand-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+    }
+    .brand-gradient-title {
+      background: linear-gradient(90deg, #0f172a 0%, #1a73e8 45%, #9333ea 80%, #0d9488 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+    }
+
+    .brand-mark svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    .brand-text h1 {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .version-chip {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: var(--radius-pill);
+      background: var(--blue-tint);
+      color: var(--blue);
+      letter-spacing: 0.2px;
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .topbar-kpis {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .kpi-pill {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-soft);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .kpi-pill .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald);
+    }
+
+    .kpi-pill .dot.active-pulse {
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.2);
+      animation: pulseDot 1.4s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 0.75; }
+    }
+
+    .kpi-pill strong {
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .kpi-pill.savings {
+      background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+      border-color: #bbf7d0;
+      color: #166534;
+    }
+
+    .kpi-pill.savings strong {
+      color: #15803d;
+    }
+
+    /* פריסת 3 עמודות: ניווט מימין, משטח עבודה במרכז, מוניטור טלמטריה חי משמאל */
+    .studio-shell {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* סרגל ניווט ימני */
+    .nav-sidebar {
+      width: 248px;
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-soft);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .nav-section-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      padding: 6px 12px 4px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      text-align: right;
+      width: 100%;
+    }
+
+    .nav-btn svg {
+      width: 19px;
+      height: 19px;
+      flex-shrink: 0;
+      color: var(--text-muted);
+      transition: color 0.16s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+
+    .nav-btn:hover svg {
+      color: var(--blue);
+    }
+
+    .nav-btn.active {
+      background: var(--blue-tint);
+      color: var(--blue);
+      font-weight: 700;
+      border-color: rgba(26, 115, 232, 0.16);
+    }
+
+    .nav-btn.active svg {
+      color: var(--blue);
+    }
+
+    .nav-counter {
+      margin-right: auto;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .nav-btn.active .nav-counter {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .sidebar-spacer {
+      flex: 1;
+    }
+
+    /* כרטיס קרדיט מפתח ומייל קבוע למטה בצד */
+    .developer-card {
+      background: linear-gradient(145deg, #f8fafc 0%, #eff6ff 100%);
+      border: 1px solid #dbeafe;
+      border-radius: 16px;
+      padding: 13px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .dev-badge-top {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .dev-badge-top svg {
+      width: 15px;
+      height: 15px;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+
+    .dev-sub {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .dev-email-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 2px;
+      padding: 6px 10px;
+      background: #ffffff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      direction: ltr;
+      transition: all 0.15s ease;
+    }
+
+    .dev-email-pill:hover {
+      background: var(--blue);
+      color: #ffffff;
+      border-color: var(--blue);
+    }
+
+    /* אזור עבודה מרכזי */
+    .workspace {
+      flex: 1;
+      overflow-y: auto;
+      padding: 22px 26px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .page-view {
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .page-view.active {
+      display: flex;
+    }
+
+    /* כרטיסים */
+    .studio-card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .card-title svg {
+      width: 20px;
+      height: 20px;
+      color: var(--blue);
+    }
+
+    .card-desc {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* סרגל פרופילים חכמים בלחיצה אחת */
+    .presets-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 1250px) {
+      .presets-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .preset-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      text-align: right;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .preset-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .preset-card.active-preset {
+      border-color: var(--blue);
+      background: linear-gradient(145deg, #ffffff 0%, #f0f7ff 100%);
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.18);
+    }
+
+    .preset-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .preset-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preset-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .preset-tag {
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .preset-card h4 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .preset-card p {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* פאנל טלמטריה צדדי חי ושקוף (FFmpeg Real-Time Dock) */
+    .telemetry-dock {
+      width: 335px;
+      background: #0f172a;
+      color: #f8fafc;
+      border-right: 1px solid #1e293b;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+      padding: 16px;
+      gap: 14px;
+    }
+
+    .dock-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .dock-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .dock-live-indicator {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #475569;
+    }
+
+    .dock-live-indicator.live {
+      background: #22c55e;
+      box-shadow: 0 0 10px #22c55e;
+      animation: pulseDot 1.1s infinite;
+    }
+
+    .hw-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+    }
+
+    .hw-badge.gpu-on {
+      background: rgba(16, 185, 129, 0.16);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    /* שעוני SVG עגולים במוניטור הצדדי */
+    .dock-gauges {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .dock-gauge-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 15px;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+    }
+
+    .gauge-ring-wrap {
+      position: relative;
+      width: 78px;
+      height: 78px;
+    }
+
+    .gauge-ring-wrap svg {
+      width: 78px;
+      height: 78px;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: #0f172a;
+      stroke-width: 7;
+    }
+
+    .gauge-fg {
+      fill: none;
+      stroke-width: 7;
+      stroke-linecap: round;
+      stroke-dasharray: 201;
+      stroke-dashoffset: 201;
+      transition: stroke-dashoffset 0.25s ease;
+    }
+
+    .gauge-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge-center .val {
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .gauge-center .unit {
+      font-size: 9.5px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .gauge-caption {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #cbd5e1;
+    }
+
+    .gauge-sub {
+      font-size: 10.5px;
+      color: #64748b;
+    }
+
+    /* תאי טלמטריה אמיתית מ-FFmpeg */
+    .telem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .telem-cell {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 9px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .telem-cell .lbl {
+      font-size: 10.5px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .telem-cell .v {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .telem-cell.highlight .v {
+      color: #38bdf8;
+    }
+
+    .telem-cell.saved .v {
+      color: #4ade80;
+    }
+
+    /* טרמינל זרם FFmpeg חי */
+    .telem-stream-box {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 13px;
+      padding: 11px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      flex: 1;
+      min-height: 170px;
+    }
+
+    .telem-stream-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    .telem-cmd {
+      font-size: 10.5px;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 8px;
+      padding: 6px 8px;
+      word-break: break-all;
+      direction: ltr;
+      text-align: left;
+      max-height: 54px;
+      overflow-y: auto;
+    }
+
+    .telem-lines {
+      font-size: 10.5px;
+      color: #cbd5e1;
+      direction: ltr;
+      text-align: left;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      max-height: 200px;
+    }
+
+    .telem-line {
+      padding: 3px 6px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.03);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* כפתורים */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      white-space: nowrap;
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #ffffff;
+      box-shadow: 0 3px 10px rgba(26, 115, 232, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-emerald {
+      background: var(--emerald);
+      color: #ffffff;
+      box-shadow: 0 3px 10px rgba(22, 163, 74, 0.25);
+    }
+
+    .btn-emerald:hover {
+      background: #15803d;
+      transform: translateY(-1px);
+    }
+
+    .btn-tonal {
+      background: var(--blue-tint);
+      color: var(--blue);
+      border-color: rgba(26, 115, 232, 0.18);
+    }
+
+    .btn-tonal:hover {
+      background: #d2e3fc;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-elevated);
+      border-color: var(--blue);
+    }
+
+    .btn-danger {
+      background: var(--red-tint);
+      color: var(--red);
+      border-color: #fecaca;
+    }
+
+    .btn-danger:hover {
+      background: var(--red);
+      color: #ffffff;
+    }
+
+    .btn-xs {
+      padding: 5px 11px;
+      font-size: 11.5px;
+    }
+
+    /* טפסים ושדות */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 13px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .input, select {
+      padding: 9px 13px;
+      border-radius: 11px;
+      border: 1px solid var(--border-strong);
+      background: #ffffff;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .input:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+    }
+
+    /* שבבי תיקיות */
+    .chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .folder-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 13px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .folder-chip button {
+      border: none;
+      background: #e2e8f0;
+      color: #475569;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .folder-chip button:hover {
+      background: var(--red);
+      color: #fff;
+    }
+
+    /* טבלאות מדיה */
+    .table-box {
+      border: 1px solid var(--border-soft);
+      border-radius: 15px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .table-scroll {
+      max-height: 440px;
+      overflow-y: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+    }
+
+    th {
+      background: var(--bg-elevated);
+      padding: 11px 14px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-soft);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: #f8fafd;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-audio { background: var(--blue-tint); color: var(--blue); }
+    .badge-video { background: var(--purple-tint); color: var(--purple); }
+    .badge-image { background: var(--cyan-tint); color: var(--cyan); }
+    .badge-green { background: var(--emerald-tint); color: var(--emerald); }
+    .badge-amber { background: var(--amber-tint); color: var(--amber); }
+
+    /* מתגים חכמים (GPU / Silence Trimmer) */
+    .toggle-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-soft);
+      gap: 12px;
+    }
+
+    .toggle-banner.gpu-banner {
+      background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+      border-color: #bbf7d0;
+    }
+
+    /* פס התקדמות חלק */
+    .progress-track {
+      width: 100%;
+      height: 9px;
+      background: var(--bg-subtle);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #1a73e8, #7c3aed, #0d9488);
+      border-radius: var(--radius-pill);
+      transition: width 0.25s ease;
+    }
+
+    /* חלונות מודאליים (תצוגה מקדימה + מעבדת השוואה A/B 5 שניות) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.62);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-window {
+      background: #ffffff;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 920px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
+    }
+
+    .modal-top {
+      padding: 16px 22px;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-body {
+      padding: 22px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .ab-pane {
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 16px;
+      background: var(--bg-elevated);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ab-pane.after-pane {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .ab-pane video, .ab-pane img {
+      width: 100%;
+      max-height: 290px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #0f172a;
+    }
+
+    .ab-pane audio {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- סרגל עליון -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="data:image/webp;base64,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" alt="MediaMorph Logo" />
+      </div>
+      <div class="brand-text">
+        <h1><span class="brand-gradient-title">MediaMorph Studio</span> <span class="version-chip" style="background:linear-gradient(135deg,#e0e7ff,#fae8ff);color:#6d28d9;border:1px solid #d8b4fe;">PRO 3.0</span></h1>
+        <p>מערכת מקומית לאופטימיזציית אודיו, וידאו ותמונות בהאצת חומרה מלאה</p>
+      </div>
+    </div>
+
+    <div class="topbar-kpis">
+      <div class="kpi-pill">
+        <span class="dot" id="topStatusDot"></span>
+        <span id="topStatusLabel">מנוע FFmpeg 9.0.1 מוכן</span>
+      </div>
+      <div class="kpi-pill">
+        <span>קבצים בסריקה:</span>
+        <strong class="num" id="topMatchedCount">0</strong>
+      </div>
+      <div class="kpi-pill savings">
+        <span>נפח שנחסך בפועל:</span>
+        <strong class="num" id="topSavedMb">0.00 MB</strong>
+      </div>
+    </div>
+  </header>
+
+  <div class="studio-shell">
+    <!-- סרגל ניווט ימני -->
+    <aside class="nav-sidebar">
+      <div class="nav-section-label">כלי עבודה מרכזיים</div>
+
+      <button class="nav-btn active" onclick="switchPage('scanner')" id="nav-scanner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>סורק חכם ופרופילים</span>
+        <span class="nav-counter num" id="badge-scanner">0</span>
+      </button>
+
+      <button class="nav-btn" onclick="switchPage('converter')" id="nav-converter">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        <span>מעבדת המרה ודחיסה</span>
+        <span class="nav-counter num" id="badge-converter">0</span>
+      </button>
+
+      <button class="nav-btn" onclick="switchPage('images')" id="nav-images">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span>אופטימיזציית תמונות</span>
+        <span class="nav-counter num" id="badge-images">0</span>
+      </button>
+
+      <button class="nav-btn" onclick="switchPage('duplicates')" id="nav-duplicates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span>מאתר כפילויות חכם</span>
+        <span class="nav-counter num" id="badge-duplicates">0</span>
+      </button>
+
+      <button class="nav-btn" onclick="switchPage('analyzer')" id="nav-analyzer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+        <span>מפה ויזואלית לכונן</span>
+      </button>
+
+      <button class="nav-btn" onclick="switchPage('history')" id="nav-history">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>יומן ביצועים והיסטוריה</span>
+        <span class="nav-counter num" id="badge-history">0</span>
+      </button>
+
+      <div class="sidebar-spacer"></div>
+
+      <!-- קרדיט עדין ומזמין להצעות ייעול למטה בצד ימין -->
+      <div class="developer-card" style="background:#f8fafc;border:1px solid #e2e8f0;padding:12px 13px;gap:5px;">
+        <div style="font-size:11.5px;color:#475569;font-weight:600;line-height:1.45;">
+          פותח על ידי <a href="mailto:y3204044@gmail.com?subject=הצעת ייעול עבור MediaMorph" class="num" style="color:#1a73e8;text-decoration:none;font-weight:700;">y3204044@gmail.com</a>
+        </div>
+        <div style="font-size:11px;color:#64748b;line-height:1.4;">
+          להצעות ייעול, רעיונות או משוב – תמיד אשמח לשמוע
+        </div>
+      </div>
+    </aside>
+
+    <!-- משטח עבודה מרכזי -->
+    <main class="workspace">
+
+      <!-- ==================== עמוד 1: סורק חכם ופרופילים ==================== -->
+      <section class="page-view active" id="page-scanner">
+
+        <!-- כפתורי פרופילים חכמים בלחיצה אחת -->
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <span style="font-size:13px;font-weight:800;color:var(--text-secondary);">פרופילים חכמים בלחיצה אחת (Smart Presets)</span>
+            <span style="font-size:11.5px;color:var(--text-muted);">לחיצה מכוונת אוטומטית את סינון הסריקה ואת הגדרות ההמרה</span>
+          </div>
+          <div class="presets-strip">
+            <div class="preset-card" id="preset-lectures" onclick="applySmartPreset('lectures')">
+              <div class="preset-top">
+                <div class="preset-icon" style="background:var(--blue-tint);color:var(--blue);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+                </div>
+                <span class="preset-tag" style="background:var(--blue-tint);color:var(--blue);">חיסכון ~75%</span>
+              </div>
+              <h4>ניקוי הרצאות והקלטות</h4>
+              <p>מאתר הקלטות ארוכות, חותך רגעי שקט מתים וממיר ל-Opus / MP3 נקי וקומפקטי.</p>
+            </div>
+
+            <div class="preset-card" id="preset-music" onclick="applySmartPreset('music')">
+              <div class="preset-top">
+                <div class="preset-icon" style="background:var(--emerald-tint);color:var(--emerald);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                </div>
+                <span class="preset-tag" style="background:var(--emerald-tint);color:var(--emerald);">שקוף לאוזן</span>
+              </div>
+              <h4>אופטימיזציית ספריית מוזיקה</h4>
+              <p>מאתר שירים כבדים מעל 220kbps וממיר ל-192kbps איכותי ללא שום הבדל שמיעתי.</p>
+            </div>
+
+            <div class="preset-card" id="preset-video4k" onclick="applySmartPreset('video4k')">
+              <div class="preset-top">
+                <div class="preset-icon" style="background:var(--purple-tint);color:var(--purple);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                </div>
+                <span class="preset-tag" style="background:var(--purple-tint);color:var(--purple);">האצת GPU 6x</span>
+              </div>
+              <h4>דחיסת וידאו 4K ל-1080p</h4>
+              <p>מקודד סרטונים כבדים ב-HEVC H.265 על גבי כרטיס המסך (VideoToolbox / NVENC).</p>
+            </div>
+
+            <div class="preset-card" id="preset-photos" onclick="applySmartPreset('photos')">
+              <div class="preset-top">
+                <div class="preset-icon" style="background:var(--cyan-tint);color:var(--cyan);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <span class="preset-tag" style="background:var(--cyan-tint);color:var(--cyan);">100% חד</span>
+              </div>
+              <h4>אלבום תמונות ללא איבוד איכות</h4>
+              <p>ממיר תמונות PNG/JPG כבדות ל-WebP Smart Near-Lossless בחדות מקורית מלאה.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- בחירת תיקיות וכוננים -->
+        <div class="studio-card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                <span>בחירת תיקיות וכוננים לסריקה</span>
+              </div>
+              <div class="card-desc">בחר תיקייה אחת או יותר (כולל דיסקים חיצוניים) או סמן סריקה של כל המחשב</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-tonal" onclick="pickNativeFolder()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>הוסף תיקייה מהמחשב</span>
+              </button>
+              <button class="btn btn-outline" onclick="toggleAllDrives()" id="btnAllDrives">סרוק את כל הכוננים</button>
+            </div>
+          </div>
+
+          <div class="chips-wrap" id="selectedFoldersContainer"></div>
+          <div id="volumesBar" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;"></div>
+        </div>
+
+        <!-- מסנני סריקה מתקדמים -->
+        <div class="studio-card">
+          <div class="card-head">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              <span>קריטריונים וסינון חכם</span>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-outline btn-xs" onclick="resetScanFilters()">איפוס מסננים</button>
+              <button class="btn btn-primary" id="btnStartScan" onclick="startScan()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>הפעל סריקה רב-תהליכונית</span>
+              </button>
+              <button class="btn btn-danger" id="btnCancelScan" onclick="cancelScan()" style="display:none;">עצור סריקה</button>
+            </div>
+          </div>
+
+          <div class="grid-4">
+            <div class="field">
+              <label>סוגי מדיה</label>
+              <div style="display:flex;gap:12px;padding-top:6px;">
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="fltAudio" checked> אודיו</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="fltVideo" checked> וידאו</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="fltImage" checked> תמונות</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>גודל קובץ מינימלי (MB)</label>
+              <input type="number" class="input num" id="fltMinSizeMb" placeholder="למשל: 5" step="0.5">
+            </div>
+            <div class="field">
+              <label>אורך מינימלי בדקות (אודיו/וידאו)</label>
+              <input type="number" class="input num" id="fltMinDurMin" placeholder="למשל: 10" step="1">
+            </div>
+            <div class="field">
+              <label>ביטרייט אודיו מינימלי (kbps)</label>
+              <input type="number" class="input num" id="fltMinAudioBitrate" placeholder="למשל: 220" step="16">
+            </div>
+          </div>
+        </div>
+
+        <!-- טבלת תוצאות סריקה + שליחה להמרה או למעבדת A/B -->
+        <div class="studio-card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">
+                <span>תוצאות הסריקה (<span class="num" id="resCountLabel">0</span> קבצים נמצאו)</span>
+              </div>
+              <div class="card-desc">לחץ על "דגימת A/B (5 שניות)" על כל קובץ כדי לשמוע/לראות השוואת לפני ואחרי אמיתית לפני המרה</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <input type="text" class="input" id="tblSearchInput" placeholder="חיפוש מהיר בשם קובץ או תיקייה..." oninput="renderScanTable()" style="width:230px;">
+              <button class="btn btn-outline btn-xs" onclick="selectAllScanned(true)">בחר הכל</button>
+              <button class="btn btn-outline btn-xs" onclick="selectAllScanned(false)">נקה בחירה</button>
+              <button class="btn btn-emerald" onclick="proceedToConverter()">
+                <span>העבר נבחרים למעבדת ההמרה (<span class="num" id="selCountBtn">0</span>)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-box">
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:38px;"><input type="checkbox" id="chkAllHeader" checked onchange="selectAllScanned(this.checked)"></th>
+                    <th>שם הקובץ ונתיב</th>
+                    <th>סוג</th>
+                    <th>נפח מקורי</th>
+                    <th>משך / רזולוציה</th>
+                    <th>קודק וביטרייט</th>
+                    <th>פעולות ובדיקת A/B</th>
+                  </tr>
+                </thead>
+                <tbody id="scanTableBody">
+                  <tr><td colspan="7" style="text-align:center;padding:38px;color:var(--text-muted);">לחץ על "הפעל סריקה רב-תהליכונית" או בחר אחד מהפרופילים החכמים למעלה כדי להתחיל.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== עמוד 2: מעבדת המרה ודחיסה ==================== -->
+      <section class="page-view" id="page-converter">
+        <div class="studio-card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>הגדרות קידוד, האצת חומרה ב-GPU וחיתוך שקט</span>
+              </div>
+              <div class="card-desc">כל שינוי בהגדרות מעדכן מיד את חיזוי החיסכון ואת דגימת ה-A/B</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-tonal" onclick="testFirstSelectedAB()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+                <span>בדוק דגימת 5 שניות (A/B Preview)</span>
+              </button>
+              <button class="btn btn-emerald" id="btnStartConvert" onclick="startConversion()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>הפעל המרת אצווה עכשיו</span>
+              </button>
+              <button class="btn btn-danger" id="btnCancelConvert" onclick="cancelConversion()" style="display:none;">עצור המרה</button>
+            </div>
+          </div>
+
+          <!-- שני מתגי עוצמה: GPU + חיתוך שקט -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+            <div class="toggle-banner gpu-banner">
+              <div>
+                <div style="font-size:13.5px;font-weight:800;color:#15803d;">האצת חומרה בכרטיס מסך (GPU VideoToolbox / NVENC)</div>
+                <div style="font-size:11.5px;color:var(--text-secondary);">מאיץ קידוד וידאו H.264 / HEVC / ProRes עד פי 6 עם גיבוי אוטומטי למעבד</div>
+              </div>
+              <input type="checkbox" id="cfgHwAccel" checked onchange="updateSavingsEstimate()" style="width:20px;height:20px;accent-color:var(--emerald);cursor:pointer;">
+            </div>
+
+            <div class="toggle-banner">
+              <div>
+                <div style="font-size:13.5px;font-weight:800;color:var(--blue);">חיתוך שקט אוטומטי (Smart Silence Trimmer)</div>
+                <div style="font-size:11.5px;color:var(--text-secondary);">מקצץ רגעי שקט מתים ארוכים בהרצאות ובהקלטות קוליות (FFmpeg silenceremove)</div>
+              </div>
+              <input type="checkbox" id="cfgSilenceTrim" onchange="updateSavingsEstimate()" style="width:20px;height:20px;accent-color:var(--blue);cursor:pointer;">
+            </div>
+          </div>
+
+          <!-- הגדרות אודיו ווידאו -->
+          <div class="grid-4" style="margin-bottom:16px;">
+            <div class="field">
+              <label>קודק יעד לאודיו</label>
+              <select id="cfgAudioCodec" onchange="updateSavingsEstimate()">
+                <option value="mp3">MP3 (LAME Standard)</option>
+                <option value="aac">AAC / M4A (Apple High Efficiency)</option>
+                <option value="opus">Opus (דחיסת דיבור והרצאות עילית)</option>
+                <option value="ogg">OGG Vorbis</option>
+                <option value="flac">FLAC (Lossless ללא איבוד איכות)</option>
+                <option value="wav_16">WAV PCM 16-bit</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>ביטרייט אודיו (kbps)</label>
+              <select id="cfgAudioBitrate" onchange="updateSavingsEstimate()">
+                <option value="64">64 kbps (הרצאות ודיבור)</option>
+                <option value="96">96 kbps (הקלטות ופודקאסטים)</option>
+                <option value="128">128 kbps (סטנדרטי חסכוני)</option>
+                <option value="160">160 kbps (מוזיקה מאוזנת)</option>
+                <option value="192" selected>192 kbps (שקוף לאוזן - מומלץ)</option>
+                <option value="256">256 kbps (אולפני גבוה)</option>
+                <option value="320">320 kbps (מקסימלי)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>ערוצי שמע ונרמול</label>
+              <div style="display:flex;gap:8px;">
+                <select id="cfgAudioChannels" style="flex:1;" onchange="updateSavingsEstimate()">
+                  <option value="keep">שמור מקור</option>
+                  <option value="2">סטריאו (2ch)</option>
+                  <option value="1">מונו (1ch)</option>
+                </select>
+                <label style="display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;"><input type="checkbox" id="cfgNormalize"> נרמול ווליום</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>מדיניות החלפת קובץ</label>
+              <select id="cfgReplaceMode">
+                <option value="replace">החלף קובץ מקורי במקום (אטומי ובטוח)</option>
+                <option value="keep_suffix">שמור גם קובץ מקור עם סיומת _original</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-4">
+            <div class="field">
+              <label>קודק וידאו</label>
+              <select id="cfgVideoCodec" onchange="updateSavingsEstimate()">
+                <option value="libx265" selected>HEVC / H.265 (חיסכון כפול בנפח)</option>
+                <option value="libx264">H.264 / AVC (תאימות אוניברסלית)</option>
+                <option value="libsvtav1">AV1 (דחיסת דור הבא)</option>
+                <option value="prores">Apple ProRes (עריכה מקצועית)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>רמת איכות וידאו (CRF)</label>
+              <input type="number" class="input num" id="cfgVideoCrf" value="23" min="14" max="36" onchange="updateSavingsEstimate()">
+            </div>
+            <div class="field">
+              <label>רזולוציית וידאו מרבית</label>
+              <select id="cfgVideoRes" onchange="applyVideoResPreset(this.value)">
+                <option value="keep">שמור רזולוציה מקורית</option>
+                <option value="1920x1080">Full HD 1080p (1920×1080)</option>
+                <option value="1280x720">HD 720p (1280×720)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>הגנה חכמה מהגדלת קובץ</label>
+              <label style="display:flex;align-items:center;gap:7px;padding-top:8px;font-size:12.5px;font-weight:700;color:var(--emerald);cursor:pointer;">
+                <input type="checkbox" id="cfgSkipIfLarger" checked> דלג אוטומטית אם הפלט לא קטן מהמקור
+              </label>
+            </div>
+          </div>
+
+          <!-- באנר חיזוי חיסכון מתמטי -->
+          <div style="margin-top:16px;padding:14px 18px;border-radius:14px;background:var(--bg-subtle);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text-secondary);">
+              נפח מקורי כולל: <strong class="num" id="estOrigMb">0 MB</strong> &nbsp;|&nbsp;
+              נפח צפוי לאחר ההמרה: <strong class="num" id="estNewMb">0 MB</strong>
+            </div>
+            <div style="font-size:14px;font-weight:800;color:var(--emerald);">
+              חיסכון משוער: <span class="num" id="estSavedMb">0 MB</span> (<span class="num" id="estSavedPct">0%</span>)
+            </div>
+          </div>
+        </div>
+
+        <!-- טבלת תור ההמרות החי -->
+        <div class="studio-card">
+          <div class="card-head">
+            <div class="card-title">תור קבצים להמרה (<span class="num" id="queueCountLbl">0</span>)</div>
+            <div style="width:260px;">
+              <div class="progress-track"><div class="progress-fill" id="convOverallBar"></div></div>
+            </div>
+          </div>
+          <div class="table-box">
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>קובץ</th>
+                    <th>סוג</th>
+                    <th>מקור</th>
+                    <th>לאחר המרה</th>
+                    <th>חיסכון</th>
+                    <th>התקדמות</th>
+                    <th>פעולות</th>
+                  </tr>
+                </thead>
+                <tbody id="convertQueueBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== עמוד 3: אופטימיזציית תמונות חכמה ==================== -->
+      <section class="page-view" id="page-images">
+        <div class="studio-card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>ממיר תמונות חכם ללא איבוד איכות (Google WebP / AVIF / PNG / Chroma 4:4:4)</span>
+              </div>
+              <div class="card-desc">מופעל על ידי מנוע Google cwebp המוטמע ו-FFmpeg 9.0.1 לדחיסה מתמטית או ויזואלית שקופה לעין</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-tonal" onclick="testFirstImageAB()">השוואת תמונה לפני/אחרי (A/B)</button>
+              <button class="btn btn-emerald" onclick="startImageBatchConversion()">המר את כל התמונות הנבחרות</button>
+            </div>
+          </div>
+
+          <div class="grid-4">
+            <div class="field">
+              <label>פורמט תמונת יעד</label>
+              <select id="cfgImgFormat" onchange="updateSavingsEstimate()">
+                <option value="webp" selected>Google WebP (מומלץ - חיסכון אדיר)</option>
+                <option value="avif">AVIF Next-Gen (דחיסת על)</option>
+                <option value="png">PNG Lossless Level-9</option>
+                <option value="jpg">JPEG Chroma 4:4:4</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>מצב שימור איכות</label>
+              <select id="cfgImgMode" onchange="updateSavingsEstimate()">
+                <option value="smart_near_lossless" selected>Smart Visual Lossless (זהה לעין - עד 70% חיסכון)</option>
+                <option value="lossless">100% Mathematical Lossless (ללא איבוד ביט בודד)</option>
+                <option value="high_compression">חיסכון אגרסיבי לארכיונים</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>שינוי קנה מידה (Scale %)</label>
+              <input type="number" class="input num" id="cfgImgScale" value="100" min="10" max="100" step="5" onchange="updateSavingsEstimate()">
+            </div>
+            <div class="field">
+              <label>ניקוי מטא-דאטה (EXIF/GPS)</label>
+              <label style="display:flex;align-items:center;gap:6px;padding-top:8px;font-size:12.5px;font-weight:600;">
+                <input type="checkbox" id="cfgImgStripMeta" checked> הסר נתוני EXIF מיותרים להקטנת נפח
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== עמוד 4: מאתר קבצים כפולים חכם (SHA-256) ==================== -->
+      <section class="page-view" id="page-duplicates">
+        <div class="studio-card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>מאתר קבצים כפולים חכם לפי חתימת תוכן (SHA-256)</span>
+              </div>
+              <div class="card-desc">מוצא שירים, סרטונים ותמונות זהים לחלוטין שמשוכפלים בתיקיות שונות ומאפשר למחוק את העותקים המיותרים בבטחה</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-primary" id="btnStartDup" onclick="startDuplicateScan()">סרוק כפילויות בתיקיות הנבחרות</button>
+              <button class="btn btn-danger" id="btnDeleteAllDups" onclick="deleteAllDuplicatesSafe()" style="display:none;">מחק את כל העותקים המיותרים (שמור 1 מכל קבוצה)</button>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:16px;padding:12px 16px;background:var(--bg-elevated);border-radius:13px;margin-bottom:14px;">
+            <div>קבצים שנבדקו: <strong class="num" id="dupScannedLbl">0</strong></div>
+            <div>קבוצות כפילויות שנמצאו: <strong class="num" id="dupGroupsLbl">0</strong></div>
+            <div style="color:var(--red);font-weight:800;">נפח מבוזבז לשחרור מיידי: <span class="num" id="dupWastedLbl">0 MB</span></div>
+          </div>
+
+          <div id="duplicatesContainer" style="display:flex;flex-direction:column;gap:12px;">
+            <div style="text-align:center;padding:34px;color:var(--text-muted);">לחץ על "סרוק כפילויות בתיקיות הנבחרות" כדי לאתר קובצי מדיה משוכפלים.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== עמוד 5: מפה ויזואלית לכונן ==================== -->
+      <section class="page-view" id="page-analyzer">
+        <div class="studio-card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">ניתוח עומק של תיקיות והקבצים הכבדים ביותר</div>
+              <div class="card-desc">ממפה אילו פורמטים ותיקיות תופסים הכי הרבה ג'יגה-בייט בכונן שלך</div>
+            </div>
+            <button class="btn btn-primary" onclick="startDriveAnalyze()">נתח את התיקייה הראשונה שנבחרה</button>
+          </div>
+          <div id="analyzerSummaryBox" style="margin-bottom:14px;"></div>
+          <div class="table-box">
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>קובץ</th>
+                    <th>סוג</th>
+                    <th>גודל (MB)</th>
+                    <th>תיקייה</th>
+                    <th>פעולות</th>
+                  </tr>
+                </thead>
+                <tbody id="analyzerTopFilesBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== עמוד 6: יומן ביצועים והיסטוריה ==================== -->
+      <section class="page-view" id="page-history">
+        <div class="studio-card">
+          <div class="card-head">
+            <div class="card-title">יומן המרות וחיסכון מצטבר</div>
+          </div>
+          <div class="table-box">
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>שם קובץ</th>
+                    <th>סוג</th>
+                    <th>נפח מקורי</th>
+                    <th>נפח חדש</th>
+                    <th>נחסך</th>
+                    <th>פעולות</th>
+                  </tr>
+                </thead>
+                <tbody id="historyTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== מוניטור טלמטריה צדדי חי ושקוף (FFmpeg Real-Time Dock) ==================== -->
+    <aside class="telemetry-dock">
+      <div class="dock-header">
+        <div class="dock-title">
+          <span class="dock-live-indicator" id="dockLiveDot"></span>
+          <span>טלמטריית מנוע חיה</span>
+        </div>
+        <span class="hw-badge" id="dockEncoderBadge">FFmpeg 9.0.1 Idle</span>
+      </div>
+
+      <!-- זוג שעוני SVG עגולים -->
+      <div class="dock-gauges">
+        <div class="dock-gauge-box">
+          <div class="gauge-ring-wrap">
+            <svg viewBox="0 0 76 76">
+              <circle class="gauge-bg" cx="38" cy="38" r="32"></circle>
+              <circle class="gauge-fg" id="ringProgress" cx="38" cy="38" r="32" stroke="#38bdf8"></circle>
+            </svg>
+            <div class="gauge-center">
+              <span class="val num" id="gaugePctVal">0%</span>
+              <span class="unit">התקדמות</span>
+            </div>
+          </div>
+          <div class="gauge-caption" id="gaugeFileCaption">ממתין לפעולה</div>
+          <div class="gauge-sub num" id="gaugeJobCounter">0 / 0 קבצים</div>
+        </div>
+
+        <div class="dock-gauge-box">
+          <div class="gauge-ring-wrap">
+            <svg viewBox="0 0 76 76">
+              <circle class="gauge-bg" cx="38" cy="38" r="32"></circle>
+              <circle class="gauge-fg" id="ringSpeed" cx="38" cy="38" r="32" stroke="#4ade80"></circle>
+            </svg>
+            <div class="gauge-center">
+              <span class="val num" id="gaugeSpeedVal">0.0</span>
+              <span class="unit" id="gaugeSpeedUnit">MB/s</span>
+            </div>
+          </div>
+          <div class="gauge-caption">קצב עיבוד בזמן אמת</div>
+          <div class="gauge-sub num" id="gaugeEtaVal">ETA: —</div>
+        </div>
+      </div>
+
+      <!-- 6 תאי טלמטריה ישירים מצינור הנתונים של FFmpeg -->
+      <div class="telem-grid">
+        <div class="telem-cell highlight">
+          <span class="lbl">מכפיל מהירות (Speed)</span>
+          <span class="v num" id="tlmSpeedFactor">1.0x</span>
+        </div>
+        <div class="telem-cell highlight">
+          <span class="lbl">ביטרייט כתיבה חי</span>
+          <span class="v num" id="tlmBitrate">—</span>
+        </div>
+        <div class="telem-cell">
+          <span class="lbl">זמן קובץ מקודד</span>
+          <span class="v num" id="tlmOutTime">00:00:00</span>
+        </div>
+        <div class="telem-cell saved">
+          <span class="lbl">נכתב לדיסק (Written)</span>
+          <span class="v num" id="tlmWrittenMb">0.00 MB</span>
+        </div>
+        <div class="telem-cell">
+          <span class="lbl">פריים נוכחי (Frame)</span>
+          <span class="v num" id="tlmFrame">0</span>
+        </div>
+        <div class="telem-cell">
+          <span class="lbl">קצב פריימים (FPS)</span>
+          <span class="v num" id="tlmFps">0.0</span>
+        </div>
+      </div>
+
+      <!-- טרמינל פלט חי מ-FFmpeg -->
+      <div class="telem-stream-box">
+        <div class="telem-stream-head">
+          <span>זרם נתונים ישיר מ-FFmpeg Pipe</span>
+          <span class="num" style="color:#38bdf8;">-progress pipe:1</span>
+        </div>
+        <div class="telem-cmd mono" id="tlmCommand">ffmpeg ready — waiting for job...</div>
+        <div class="telem-lines mono" id="tlmRawLines">
+          <div class="telem-line">המערכת מוכנה. כל פלט של FFmpeg יוצג כאן בשקיפות מלאה בזמן אמת.</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ==================== חלון מודאלי: מעבדת השוואה A/B (5 שניות) ותצוגה מקדימה ==================== -->
+  <div class="modal-backdrop" id="abModalBackdrop" onclick="if(event.target===this) closeAbModal()">
+    <div class="modal-window">
+      <div class="modal-top">
+        <div>
+          <h3 id="abModalTitle" style="font-size:16px;font-weight:800;">מעבדת השוואה חיה (לפני מול אחרי)</h3>
+          <p id="abModalSub" style="font-size:12px;color:var(--text-secondary);">בדיקת איכות אמיתית לפני הרצה על כל התיקייה</p>
+        </div>
+        <button class="btn btn-outline btn-xs" onclick="closeAbModal()">סגור חלון ✕</button>
+      </div>
+      <div class="modal-body" id="abModalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    let selectedPaths = [];
+    let scanAllDrives = false;
+    let scannedFiles = [];
+    let selectedMap = new Set();
+    let videoTargetW = null;
+    let videoTargetH = null;
+
+    function setRing(elId, pct) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      const clamped = Math.max(0, Math.min(100, Number(pct) || 0));
+      const circumference = 201;
+      el.style.strokeDashoffset = String(circumference - (circumference * clamped) / 100);
+    }
+
+    function switchPage(pageId) {
+      document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      const target = document.getElementById('page-' + pageId);
+      const btn = document.getElementById('nav-' + pageId);
+      if (target) target.classList.add('active');
+      if (btn) btn.classList.add('active');
+      if (pageId === 'converter' || pageId === 'images') {
+        renderConverterQueue();
+        updateSavingsEstimate();
+      }
+    }
+
+    async function loadVolumes() {
+      try {
+        const r = await fetch('/api/volumes');
+        const data = await r.json();
+        const vols = data.volumes || [];
+        if (selectedPaths.length === 0 && vols.length > 0) {
+          selectedPaths.push(vols[0].path);
+        }
+        renderSelectedFolders();
+        const bar = document.getElementById('volumesBar');
+        bar.innerHTML = vols.map(v => `
+          <button class="btn btn-outline btn-xs" onclick="addFolderPath('${v.path.replace(/'/g, "\\'")}')">
+            + ${v.name} (<span class="num">${v.freeGb} GB</span> פנוי)
+          </button>
+        `).join('');
+      } catch (e) {}
+    }
+
+    function renderSelectedFolders() {
+      const box = document.getElementById('selectedFoldersContainer');
+      if (scanAllDrives) {
+        box.innerHTML = `<div class="folder-chip" style="background:var(--blue-tint);color:var(--blue);">סריקת כל הכוננים המחוברים למחשב מופעלת</div>`;
+        return;
+      }
+      if (selectedPaths.length === 0) {
+        box.innerHTML = `<span style="font-size:12.5px;color:var(--text-muted);">לא נבחרו תיקיות. לחץ על "הוסף תיקייה מהמחשב".</span>`;
+        return;
+      }
+      box.innerHTML = selectedPaths.map((p, idx) => `
+        <div class="folder-chip">
+          <span class="mono">${p}</span>
+          <button onclick="removeFolderPath(${idx})">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function addFolderPath(p) {
+      scanAllDrives = false;
+      if (!selectedPaths.includes(p)) selectedPaths.push(p);
+      renderSelectedFolders();
+    }
+
+    function removeFolderPath(idx) {
+      selectedPaths.splice(idx, 1);
+      renderSelectedFolders();
+    }
+
+    function toggleAllDrives() {
+      scanAllDrives = !scanAllDrives;
+      renderSelectedFolders();
+    }
+
+    async function pickNativeFolder() {
+      try {
+        const r = await fetch('/api/pick-folder');
+        const d = await r.json();
+        if (d.path) addFolderPath(d.path);
+      } catch (e) {}
+    }
+
+    function resetScanFilters() {
+      document.getElementById('fltAudio').checked = true;
+      document.getElementById('fltVideo').checked = true;
+      document.getElementById('fltImage').checked = true;
+      document.getElementById('fltMinSizeMb').value = '';
+      document.getElementById('fltMinDurMin').value = '';
+      document.getElementById('fltMinAudioBitrate').value = '';
+      document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active-preset'));
+    }
+
+    /* החלת פרופילים חכמים בלחיצה אחת */
+    function applySmartPreset(preset) {
+      document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active-preset'));
+      const card = document.getElementById('preset-' + preset);
+      if (card) card.classList.add('active-preset');
+
+      if (preset === 'lectures') {
+        document.getElementById('fltAudio').checked = true;
+        document.getElementById('fltVideo').checked = false;
+        document.getElementById('fltImage').checked = false;
+        document.getElementById('fltMinDurMin').value = '10';
+        document.getElementById('fltMinSizeMb').value = '';
+        document.getElementById('fltMinAudioBitrate').value = '';
+        document.getElementById('cfgAudioCodec').value = 'opus';
+        document.getElementById('cfgAudioBitrate').value = '64';
+        document.getElementById('cfgAudioChannels').value = '1';
+        document.getElementById('cfgSilenceTrim').checked = true;
+        document.getElementById('cfgNormalize').checked = true;
+      } else if (preset === 'music') {
+        document.getElementById('fltAudio').checked = true;
+        document.getElementById('fltVideo').checked = false;
+        document.getElementById('fltImage').checked = false;
+        document.getElementById('fltMinDurMin').value = '';
+        document.getElementById('fltMinAudioBitrate').value = '220';
+        document.getElementById('cfgAudioCodec').value = 'mp3';
+        document.getElementById('cfgAudioBitrate').value = '192';
+        document.getElementById('cfgAudioChannels').value = 'keep';
+        document.getElementById('cfgSilenceTrim').checked = false;
+      } else if (preset === 'video4k') {
+        document.getElementById('fltAudio').checked = false;
+        document.getElementById('fltVideo').checked = true;
+        document.getElementById('fltImage').checked = false;
+        document.getElementById('fltMinSizeMb').value = '15';
+        document.getElementById('cfgVideoCodec').value = 'libx265';
+        document.getElementById('cfgVideoCrf').value = '24';
+        document.getElementById('cfgHwAccel').checked = true;
+        document.getElementById('cfgVideoRes').value = '1920x1080';
+        applyVideoResPreset('1920x1080');
+      } else if (preset === 'photos') {
+        document.getElementById('fltAudio').checked = false;
+        document.getElementById('fltVideo').checked = false;
+        document.getElementById('fltImage').checked = true;
+        document.getElementById('fltMinSizeMb').value = '0.3';
+        document.getElementById('cfgImgFormat').value = 'webp';
+        document.getElementById('cfgImgMode').value = 'smart_near_lossless';
+      }
+      startScan();
+    }
+
+    function applyVideoResPreset(val) {
+      if (val === 'keep') {
+        videoTargetW = null;
+        videoTargetH = null;
+      } else {
+        const parts = val.split('x');
+        videoTargetW = Number(parts[0]);
+        videoTargetH = Number(parts[1]);
+      }
+      updateSavingsEstimate();
+    }
+
+    async function startScan() {
+      const types = [];
+      if (document.getElementById('fltAudio').checked) types.push('audio');
+      if (document.getElementById('fltVideo').checked) types.push('video');
+      if (document.getElementById('fltImage').checked) types.push('image');
+
+      const minSz = Number(document.getElementById('fltMinSizeMb').value);
+      const minDur = Number(document.getElementById('fltMinDurMin').value);
+      const minBr = Number(document.getElementById('fltMinAudioBitrate').value);
+
+      const payload = {
+        paths: selectedPaths,
+        scanAllDrives,
+        filters: {
+          mediaTypes: types,
+          minSizeBytes: minSz > 0 ? minSz * 1024 * 1024 : null,
+          minDurationSec: minDur > 0 ? minDur * 60 : null,
+          minAudioBitrateKbps: minBr > 0 ? minBr : null
+        }
+      };
+
+      await fetch('/api/scan/start', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+    }
+
+    async function cancelScan() {
+      await fetch('/api/scan/cancel', {method: 'POST'});
+    }
+
+    function selectAllScanned(flag) {
+      if (flag) {
+        scannedFiles.forEach(f => selectedMap.add(f.path));
+      } else {
+        selectedMap.clear();
+      }
+      renderScanTable();
+      updateSelectedCounters();
+    }
+
+    function toggleFileSelect(fpath, flag) {
+      if (flag) selectedMap.add(fpath);
+      else selectedMap.delete(fpath);
+      updateSelectedCounters();
+    }
+
+    function updateSelectedCounters() {
+      document.getElementById('selCountBtn').textContent = selectedMap.size;
+      document.getElementById('badge-converter').textContent = selectedMap.size;
+      const imgCount = scannedFiles.filter(f => f.type === 'image' && selectedMap.has(f.path)).length;
+      document.getElementById('badge-images').textContent = imgCount;
+    }
+
+    function renderScanTable() {
+      const tbody = document.getElementById('scanTableBody');
+      const q = (document.getElementById('tblSearchInput').value || '').toLowerCase();
+      const filtered = scannedFiles.filter(f => !q || f.name.toLowerCase().includes(q) || f.dir.toLowerCase().includes(q));
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:34px;color:var(--text-muted);">לא נמצאו קבצים התואמים לחיפוש או למסננים.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.slice(0, 350).map(f => {
+        const checked = selectedMap.has(f.path) ? 'checked' : '';
+        const typeBadge = f.type === 'audio'
+          ? '<span class="badge badge-audio">אודיו</span>'
+          : (f.type === 'video' ? '<span class="badge badge-video">וידאו</span>' : '<span class="badge badge-image">תמונה</span>');
+        const meta1 = f.type === 'image'
+          ? `<span class="num">${f.width || '—'}×${f.height || '—'}</span>`
+          : `<span class="num">${f.durationFormatted || '—'}</span>`;
+        const meta2 = f.type === 'image'
+          ? `<span class="num">${f.ext.toUpperCase()}</span>`
+          : `<span class="num">${f.codec || ''} ${f.bitrateKbps ? f.bitrateKbps + ' kbps' : ''}</span>`;
+        const safePath = encodeURIComponent(f.path);
+
+        return `
+          <tr>
+            <td><input type="checkbox" ${checked} onchange="toggleFileSelect(decodeURIComponent('${safePath}'), this.checked)"></td>
+            <td>
+              <div style="font-weight:700;color:var(--text-primary);">${f.name}</div>
+              <div class="mono" style="font-size:11px;color:var(--text-muted);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${f.dir}</div>
+            </td>
+            <td>${typeBadge}</td>
+            <td><strong class="num">${f.sizeMb} MB</strong></td>
+            <td>${meta1}</td>
+            <td>${meta2}</td>
+            <td>
+              <div style="display:flex;gap:6px;">
+                <button class="btn btn-tonal btn-xs" onclick="openAbPreviewByPath(decodeURIComponent('${safePath}'))">דגימת A/B (5 שניות)</button>
+                <button class="btn btn-outline btn-xs" onclick="openQuickPreview(decodeURIComponent('${safePath}'), '${f.type}', '${f.name.replace(/'/g, "\\'")}')">נגן</button>
+                <button class="btn btn-outline btn-xs" onclick="revealPath(decodeURIComponent('${safePath}'))">תיקייה</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function gatherSettings() {
+      return {
+        audioCodec: document.getElementById('cfgAudioCodec').value,
+        audioBitrateKbps: Number(document.getElementById('cfgAudioBitrate').value),
+        audioChannels: document.getElementById('cfgAudioChannels').value,
+        normalizeAudio: document.getElementById('cfgNormalize').checked,
+        silenceTrim: document.getElementById('cfgSilenceTrim').checked,
+        hwAccel: document.getElementById('cfgHwAccel').checked,
+        videoCodec: document.getElementById('cfgVideoCodec').value,
+        videoRateMode: 'crf',
+        videoCrf: Number(document.getElementById('cfgVideoCrf').value),
+        videoWidth: videoTargetW,
+        videoHeight: videoTargetH,
+        fileReplaceMode: document.getElementById('cfgReplaceMode').value,
+        skipIfLarger: document.getElementById('cfgSkipIfLarger').checked,
+        imageFormat: document.getElementById('cfgImgFormat').value,
+        imageMode: document.getElementById('cfgImgMode').value,
+        imageScalePct: Number(document.getElementById('cfgImgScale').value || 100),
+        imageStripMetadata: document.getElementById('cfgImgStripMeta').checked
+      };
+    }
+
+    function proceedToConverter() {
+      switchPage('converter');
+    }
+
+    async function updateSavingsEstimate() {
+      const files = scannedFiles.filter(f => selectedMap.has(f.path));
+      document.getElementById('queueCountLbl').textContent = files.length;
+      if (files.length === 0) return;
+      try {
+        const r = await fetch('/api/estimate', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({files, settings: gatherSettings()})
+        });
+        const d = await r.json();
+        document.getElementById('estOrigMb').textContent = d.totalOriginalMb + ' MB';
+        document.getElementById('estNewMb').textContent = d.totalEstimatedMb + ' MB';
+        document.getElementById('estSavedMb').textContent = d.totalSavedMb + ' MB';
+        document.getElementById('estSavedPct').textContent = d.savedPct + '%';
+      } catch (e) {}
+    }
+
+    function renderConverterQueue(jobsOverride) {
+      const tbody = document.getElementById('convertQueueBody');
+      const list = jobsOverride && jobsOverride.length > 0
+        ? jobsOverride
+        : scannedFiles.filter(f => selectedMap.has(f.path)).map(f => ({
+            path: f.path, name: f.name, type: f.type, originalMb: f.sizeMb,
+            newMb: null, savedMb: 0, progress: 0, status: 'ready'
+          }));
+
+      document.getElementById('queueCountLbl').textContent = list.length;
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--text-muted);">לא נבחרו קבצים בתור ההמרה.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.slice(0, 250).map(j => {
+        const safePath = encodeURIComponent(j.outputPath || j.path);
+        const stBadge = j.status === 'done'
+          ? '<span class="badge badge-green">הושלם (100%)</span>'
+          : (j.status === 'converting'
+              ? `<span class="badge badge-audio num">מקודד כעת ${j.progress}%</span>`
+              : (j.status === 'error' ? `<span class="badge badge-amber">${j.error || 'שגיאה'}</span>` : '<span class="badge">ממתין בתור</span>'));
+        return `
+          <tr>
+            <td style="font-weight:700;">${j.name}</td>
+            <td><span class="badge badge-audio">${j.type}</span></td>
+            <td class="num">${j.originalMb} MB</td>
+            <td class="num">${j.newMb !== null ? j.newMb + ' MB' : '—'}</td>
+            <td class="num" style="color:var(--emerald);font-weight:700;">${j.savedMb ? j.savedMb + ' MB' : '—'}</td>
+            <td>${stBadge}</td>
+            <td>
+              <button class="btn btn-tonal btn-xs" onclick="openAbPreviewByPath(decodeURIComponent('${safePath}'))">בדיקת A/B</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function startConversion() {
+      const files = scannedFiles.filter(f => selectedMap.has(f.path));
+      if (files.length === 0) return;
+      await fetch('/api/convert/start', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({files, settings: gatherSettings()})
+      });
+    }
+
+    async function startImageBatchConversion() {
+      const files = scannedFiles.filter(f => f.type === 'image' && selectedMap.has(f.path));
+      if (files.length === 0) return;
+      switchPage('converter');
+      await fetch('/api/convert/start', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({files, settings: gatherSettings()})
+      });
+    }
+
+    async function cancelConversion() {
+      await fetch('/api/convert/cancel', {method: 'POST'});
+    }
+
+    /* ==================== מעבדת השוואה חיה A/B (5 שניות) ==================== */
+    function testFirstSelectedAB() {
+      const first = scannedFiles.find(f => selectedMap.has(f.path)) || scannedFiles[0];
+      if (first) openAbPreviewForFile(first);
+    }
+
+    function testFirstImageAB() {
+      const firstImg = scannedFiles.find(f => f.type === 'image' && selectedMap.has(f.path)) || scannedFiles.find(f => f.type === 'image');
+      if (firstImg) openAbPreviewForFile(firstImg);
+    }
+
+    function openAbPreviewByPath(fpath) {
+      const f = scannedFiles.find(x => x.path === fpath);
+      if (f) openAbPreviewForFile(f);
+    }
+
+    async function openAbPreviewForFile(fileObj) {
+      const modal = document.getElementById('abModalBackdrop');
+      const body = document.getElementById('abModalBody');
+      document.getElementById('abModalTitle').textContent = `מעבדת השוואה חיה A/B — ${fileObj.name}`;
+      document.getElementById('abModalSub').textContent = 'מייצר כעת דגימה אמיתית באמצעות FFmpeg לבדיקת איכות וחיסכון...';
+      body.innerHTML = `<div style="text-align:center;padding:42px;font-weight:700;color:var(--blue);">מפיק דגימת 5 שניות אמיתית מהקובץ ומקודד לפי ההגדרות שלך...</div>`;
+      modal.classList.add('open');
+
+      try {
+        const r = await fetch('/api/ab-preview', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({file: fileObj, settings: gatherSettings()})
+        });
+        const d = await r.json();
+        if (!d.ok) {
+          body.innerHTML = `<div style="color:var(--red);padding:24px;text-align:center;">${d.error || 'שגיאה ביצירת דגימת ההשוואה'}</div>`;
+          return;
+        }
+
+        document.getElementById('abModalSub').textContent = `מקודד פעיל: ${d.encoder} | חיסכון מדוד בדגימה: ${d.savedPct}%`;
+        const urlA = `/api/stream?path=${encodeURIComponent(d.origPath)}&t=${Date.now()}`;
+        const urlB = `/api/stream?path=${encodeURIComponent(d.convPath)}&t=${Date.now()}`;
+
+        if (d.type === 'image') {
+          body.innerHTML = `
+            <div class="ab-grid">
+              <div class="ab-pane">
+                <div style="display:flex;justify-content:space-between;font-weight:800;">
+                  <span>לפני (מקור A)</span>
+                  <span class="num">${d.origSizeKb} KB</span>
+                </div>
+                <img src="${urlA}" />
+              </div>
+              <div class="ab-pane after-pane">
+                <div style="display:flex;justify-content:space-between;font-weight:800;color:#15803d;">
+                  <span>אחרי המרה (תוצאה B)</span>
+                  <span class="num">${d.convSizeKb} KB (חיסכון ${d.savedPct}%)</span>
+                </div>
+                <img src="${urlB}" />
+              </div>
+            </div>
+          `;
+        } else if (d.type === 'video') {
+          body.innerHTML = `
+            <div class="ab-grid">
+              <div class="ab-pane">
+                <div style="display:flex;justify-content:space-between;font-weight:800;">
+                  <span>מקור A (דגימת ${d.clipDuration} שניות)</span>
+                  <span class="num">${d.origSizeKb} KB</span>
+                </div>
+                <video id="abMediaA" controls src="${urlA}"></video>
+              </div>
+              <div class="ab-pane after-pane">
+                <div style="display:flex;justify-content:space-between;font-weight:800;color:#15803d;">
+                  <span>אחרי המרה B (${d.encoder})</span>
+                  <span class="num">${d.convSizeKb} KB (חיסכון ${d.savedPct}%)</span>
+                </div>
+                <video id="abMediaB" controls src="${urlB}"></video>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:center;gap:10px;">
+              <button class="btn btn-primary" onclick="syncPlayAB()">נגן את שניהם בסנכרון לבדיקת הבדלים</button>
+            </div>
+          `;
+        } else {
+          body.innerHTML = `
+            <div class="ab-grid">
+              <div class="ab-pane">
+                <div style="display:flex;justify-content:space-between;font-weight:800;">
+                  <span>מקור A (דגימת ${d.clipDuration} שניות)</span>
+                  <span class="num">${d.origSizeKb} KB</span>
+                </div>
+                <audio id="abMediaA" controls src="${urlA}"></audio>
+              </div>
+              <div class="ab-pane after-pane">
+                <div style="display:flex;justify-content:space-between;font-weight:800;color:#15803d;">
+                  <span>אחרי המרה B (${d.encoder})</span>
+                  <span class="num">${d.convSizeKb} KB (חיסכון ${d.savedPct}%)</span>
+                </div>
+                <audio id="abMediaB" controls src="${urlB}"></audio>
+              </div>
+            </div>
+          `;
+        }
+      } catch (e) {
+        body.innerHTML = `<div style="color:var(--red);padding:24px;text-align:center;">שגיאה בתקשורת עם מנוע הדגימה</div>`;
+      }
+    }
+
+    function syncPlayAB() {
+      const a = document.getElementById('abMediaA');
+      const b = document.getElementById('abMediaB');
+      if (a && b) {
+        a.currentTime = 0;
+        b.currentTime = 0;
+        a.play();
+        b.play();
+      }
+    }
+
+    function openQuickPreview(fpath, mtype, name) {
+      const modal = document.getElementById('abModalBackdrop');
+      const body = document.getElementById('abModalBody');
+      document.getElementById('abModalTitle').textContent = `תצוגה מקדימה — ${name}`;
+      document.getElementById('abModalSub').textContent = fpath;
+      const url = `/api/stream?path=${encodeURIComponent(fpath)}`;
+      if (mtype === 'image') {
+        body.innerHTML = `<div style="text-align:center;"><img src="${url}" style="max-width:100%;max-height:520px;border-radius:14px;"/></div>`;
+      } else if (mtype === 'video') {
+        body.innerHTML = `<video controls autoplay src="${url}" style="width:100%;max-height:500px;border-radius:14px;background:#000;"></video>`;
+      } else {
+        body.innerHTML = `<div style="padding:26px;"><audio controls autoplay src="${url}" style="width:100%;"></audio></div>`;
+      }
+      modal.classList.add('open');
+    }
+
+    function closeAbModal() {
+      const body = document.getElementById('abModalBody');
+      body.innerHTML = '';
+      document.getElementById('abModalBackdrop').classList.remove('open');
+    }
+
+    async function revealPath(fpath) {
+      await fetch('/api/reveal', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({path: fpath})
+      });
+    }
+
+    /* ==================== מאתר כפילויות SHA-256 ==================== */
+    let duplicateGroups = [];
+
+    async function startDuplicateScan() {
+      await fetch('/api/duplicates/start', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({paths: selectedPaths})
+      });
+    }
+
+    function renderDuplicates(dupState) {
+      document.getElementById('dupScannedLbl').textContent = dupState.scanned_files || 0;
+      duplicateGroups = dupState.groups || [];
+      document.getElementById('dupGroupsLbl').textContent = duplicateGroups.length;
+      document.getElementById('badge-duplicates').textContent = duplicateGroups.length;
+      document.getElementById('dupWastedLbl').textContent = (dupState.wasted_mb || 0) + ' MB';
+      document.getElementById('btnDeleteAllDups').style.display = duplicateGroups.length > 0 ? 'inline-flex' : 'none';
+
+      const box = document.getElementById('duplicatesContainer');
+      if (dupState.running) {
+        box.innerHTML = `<div style="text-align:center;padding:30px;font-weight:700;color:var(--blue);">סורק ומחשב חתימות SHA-256 לקבצים... (${dupState.scanned_files} נסרקו)</div>`;
+        return;
+      }
+      if (duplicateGroups.length === 0) {
+        box.innerHTML = `<div style="text-align:center;padding:30px;color:var(--text-muted);">לא נמצאו קבצים כפולים בתיקיות שנבחרו.</div>`;
+        return;
+      }
+
+      box.innerHTML = duplicateGroups.slice(0, 100).map((g, gi) => `
+        <div style="border:1px solid var(--border-soft);border-radius:14px;padding:14px 16px;background:var(--bg-elevated);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div>
+              <span class="badge badge-amber">${g.count} עותקים זהים (SHA-256: ${g.hash})</span>
+              <strong class="num" style="margin-right:8px;">${g.sizeMb} MB לכל קובץ</strong>
+              <span style="color:var(--red);font-weight:800;margin-right:10px;">בזבוז: <span class="num">${g.wastedMb} MB</span></span>
+            </div>
+            <button class="btn btn-danger btn-xs" onclick="deleteGroupDuplicates(${gi})">שמור מקור 1 ומחק ${g.count - 1} כפילויות</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            ${g.files.map((f, fi) => `
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#fff;border-radius:9px;border:1px solid #e2e8f0;font-size:12px;">
+                <div>
+                  <span class="badge ${fi===0 ? 'badge-green' : 'badge-amber'}">${fi===0 ? 'יישמר כמקור' : 'עותק כפול למחיקה'}</span>
+                  <strong style="margin-right:6px;">${f.name}</strong>
+                  <span class="mono" style="color:var(--text-muted);margin-right:8px;">${f.dir}</span>
+                </div>
+                <button class="btn btn-outline btn-xs" onclick="revealPath('${f.path.replace(/'/g, "\\'")}')">הצג בתיקייה</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function deleteGroupDuplicates(groupIdx) {
+      const g = duplicateGroups[groupIdx];
+      if (!g || g.files.length < 2) return;
+      const toDelete = g.files.slice(1).map(f => f.path);
+      await fetch('/api/duplicates/delete', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({paths: toDelete})
+      });
+      startDuplicateScan();
+    }
+
+    async function deleteAllDuplicatesSafe() {
+      const toDelete = [];
+      duplicateGroups.forEach(g => {
+        if (g.files && g.files.length > 1) {
+          g.files.slice(1).forEach(f => toDelete.push(f.path));
+        }
+      });
+      if (toDelete.length === 0) return;
+      await fetch('/api/duplicates/delete', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({paths: toDelete})
+      });
+      startDuplicateScan();
+    }
+
+    /* ==================== מפה ויזואלית לכונן ==================== */
+    async function startDriveAnalyze() {
+      const target = selectedPaths[0] || '';
+      await fetch('/api/analyze/start', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({path: target})
+      });
+    }
+
+    function renderAnalyzer(anState) {
+      if (!anState.result) return;
+      const res = anState.result;
+      document.getElementById('analyzerSummaryBox').innerHTML = `
+        <div style="display:flex;gap:14px;flex-wrap:wrap;padding:12px 16px;background:var(--bg-elevated);border-radius:13px;">
+          <div>סה"כ קבצים: <strong class="num">${res.totalFiles}</strong></div>
+          <div>נפח כולל: <strong class="num">${res.totalSizeMb} MB</strong></div>
+          <div>וידאו: <strong class="num" style="color:var(--purple);">${res.videoSizeMb} MB</strong></div>
+          <div>אודיו: <strong class="num" style="color:var(--blue);">${res.audioSizeMb} MB</strong></div>
+          <div>תמונות: <strong class="num" style="color:var(--cyan);">${res.imageSizeMb} MB</strong></div>
+        </div>
+      `;
+      const tbody = document.getElementById('analyzerTopFilesBody');
+      tbody.innerHTML = (res.topFiles || []).slice(0, 60).map(f => `
+        <tr>
+          <td style="font-weight:700;">${f.name}</td>
+          <td><span class="badge badge-audio">${f.type}</span></td>
+          <td class="num"><strong>${f.sizeMb} MB</strong></td>
+          <td class="mono" style="font-size:11px;color:var(--text-muted);">${f.dir}</td>
+          <td><button class="btn btn-outline btn-xs" onclick="revealPath('${f.path.replace(/'/g, "\\'")}')">הצג</button></td>
+        </tr>
+      `).join('');
+    }
+
+    /* ==================== לולאת טלמטריה בזמן אמת (3.5 פעמים בשנייה) ==================== */
+    let lastMatchedLen = -1;
+    let wasScanRunning = false;
+
+    async function pollEngineTelemetry() {
+      try {
+        const r = await fetch('/api/status');
+        const st = await r.json();
+
+        const sc = st.scan || {};
+        const cv = st.convert || {};
+        const tlm = cv.telemetry || {};
+        const dup = st.duplicates || {};
+        const an = st.analyze || {};
+
+        document.getElementById('topSavedMb').textContent = (cv.total_saved_mb || 0).toFixed(2) + ' MB';
+        document.getElementById('topMatchedCount').textContent = (sc.matched_files || []).length;
+        document.getElementById('badge-scanner').textContent = (sc.matched_files || []).length;
+        document.getElementById('badge-history').textContent = (cv.history || []).length;
+
+        document.getElementById('btnStartScan').style.display = sc.running ? 'none' : 'inline-flex';
+        document.getElementById('btnCancelScan').style.display = sc.running ? 'inline-flex' : 'none';
+        document.getElementById('btnStartConvert').style.display = cv.running ? 'none' : 'inline-flex';
+        document.getElementById('btnCancelConvert').style.display = cv.running ? 'inline-flex' : 'none';
+
+        const dot = document.getElementById('topStatusDot');
+        const lbl = document.getElementById('topStatusLabel');
+        const dockDot = document.getElementById('dockLiveDot');
+
+        if (cv.running) {
+          dot.classList.add('active-pulse');
+          dockDot.classList.add('live');
+          lbl.textContent = `מקודד חי: ${cv.current_file} (${cv.overall_progress}%)`;
+        } else if (sc.running) {
+          dot.classList.add('active-pulse');
+          dockDot.classList.add('live');
+          lbl.textContent = `סורק ב-8 תהליכונים: ${sc.scanned_files} קבצים (${sc.speed_files_sec} קבצים/שנ')`;
+        } else {
+          dot.classList.remove('active-pulse');
+          dockDot.classList.remove('live');
+          lbl.textContent = 'מנוע FFmpeg 9.0.1 מוכן';
+        }
+
+        /* עדכון תוצאות סריקה */
+        if ((sc.matched_files || []).length !== lastMatchedLen || (wasScanRunning && !sc.running)) {
+          lastMatchedLen = (sc.matched_files || []).length;
+          scannedFiles = sc.matched_files || [];
+          document.getElementById('resCountLabel').textContent = scannedFiles.length;
+          if (selectedMap.size === 0 && scannedFiles.length > 0) {
+            scannedFiles.forEach(f => selectedMap.add(f.path));
+          }
+          renderScanTable();
+          updateSelectedCounters();
+          updateSavingsEstimate();
+        }
+        wasScanRunning = sc.running;
+
+        /* עדכון מוניטור הטלמטריה הצדדי החי */
+        const encBadge = document.getElementById('dockEncoderBadge');
+        if (cv.running) {
+          encBadge.textContent = (tlm.gpuActive ? 'GPU: ' : 'CPU: ') + (tlm.encoderName || 'FFmpeg');
+          encBadge.className = 'hw-badge' + (tlm.gpuActive ? ' gpu-on' : '');
+          setRing('ringProgress', cv.overall_progress || 0);
+          document.getElementById('gaugePctVal').textContent = (cv.overall_progress || 0) + '%';
+          document.getElementById('gaugeFileCaption').textContent = cv.current_file || 'מקודד...';
+          document.getElementById('gaugeJobCounter').textContent = `${(cv.current_job_index || 0) + 1} / ${cv.total_jobs || 0} קבצים`;
+
+          const spd = cv.speed_mb_sec || 0;
+          setRing('ringSpeed', Math.min(100, spd * 4));
+          document.getElementById('gaugeSpeedVal').textContent = spd.toFixed(1);
+          document.getElementById('gaugeSpeedUnit').textContent = 'MB/s';
+          document.getElementById('gaugeEtaVal').textContent = `ETA: ${cv.eta_sec || 0}s`;
+          document.getElementById('convOverallBar').style.width = (cv.overall_progress || 0) + '%';
+          renderConverterQueue(cv.jobs);
+        } else if (sc.running) {
+          encBadge.textContent = 'Multi-Thread Scanner (8x)';
+          setRing('ringProgress', 75);
+          document.getElementById('gaugePctVal').textContent = sc.matched_count || 0;
+          document.getElementById('gaugeFileCaption').textContent = 'סריקה רב-תהליכונית פעילה';
+          document.getElementById('gaugeJobCounter').textContent = `${sc.scanned_files || 0} נבדקו`;
+          setRing('ringSpeed', Math.min(100, (sc.speed_files_sec || 0) / 3));
+          document.getElementById('gaugeSpeedVal').textContent = sc.speed_files_sec || 0;
+          document.getElementById('gaugeSpeedUnit').textContent = 'קבצים/שנ';
+        }
+
+        document.getElementById('tlmSpeedFactor').textContent = tlm.speedFactor || '1.0x';
+        document.getElementById('tlmBitrate').textContent = tlm.bitrate || '—';
+        document.getElementById('tlmOutTime').textContent = `${tlm.outTime || '00:00:00'} / ${tlm.totalDurationFormatted || '00:00'}`;
+        document.getElementById('tlmWrittenMb').textContent = (tlm.writtenMb || 0).toFixed(2) + ' MB';
+        document.getElementById('tlmFrame').textContent = tlm.frame || 0;
+        document.getElementById('tlmFps').textContent = (tlm.fps || 0).toFixed(1);
+
+        if (tlm.command) {
+          document.getElementById('tlmCommand').textContent = tlm.command;
+        }
+        if (tlm.rawLines && tlm.rawLines.length > 0) {
+          const linesBox = document.getElementById('tlmRawLines');
+          linesBox.innerHTML = tlm.rawLines.slice(-14).map(l => `<div class="telem-line">${l}</div>`).join('');
+          linesBox.scrollTop = linesBox.scrollHeight;
+        }
+
+        /* עדכון היסטוריה */
+        if (cv.history && cv.history.length > 0) {
+          const hbody = document.getElementById('historyTableBody');
+          hbody.innerHTML = cv.history.slice(0, 100).map(h => `
+            <tr>
+              <td style="font-weight:700;">${h.name}</td>
+              <td><span class="badge badge-audio">${h.type}</span></td>
+              <td class="num">${h.originalMb} MB</td>
+              <td class="num">${h.newMb} MB</td>
+              <td class="num" style="color:var(--emerald);font-weight:800;">${h.savedMb} MB</td>
+              <td><button class="btn btn-outline btn-xs" onclick="revealPath('${(h.path || '').replace(/'/g, "\\'")}')">הצג בתיקייה</button></td>
+            </tr>
+          `).join('');
+        }
+
+        renderDuplicates(dup);
+        renderAnalyzer(an);
+      } catch (e) {}
+    }
+
+    loadVolumes();
+    setInterval(pollEngineTelemetry, 280);
+  </script>
+</body>
+</html>

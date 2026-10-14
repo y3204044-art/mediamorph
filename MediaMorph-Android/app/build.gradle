@@ -1,0 +1,41 @@
+plugins {
+    id 'com.android.application'
+    id 'com.chaquo.python'
+}
+
+android {
+    namespace 'com.mediamorph.studio'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.mediamorph.studio"
+        minSdk 24
+        targetSdk 35
+        versionCode 300
+        versionName "3.0.0-android"
+        // ספריית FFmpeg מתפרסמת רק ל-arm64 (רוב הטלפונים המודרניים)
+        ndk { abiFilters "arm64-v8a" }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    packaging {
+        jniLibs {
+            pickFirsts += ['**/libc++_shared.so']
+        }
+    }
+}
+
+chaquopy {
+    defaultConfig {
+        version = "3.13"
+    }
+}
+
+dependencies {
+    // FFmpeg לאנדרואיד: מזלג קהילתי של ffmpeg-kit (הפרויקט המקורי הופסק). רישיון GPL-3.0 – כולל x264/x265.
+    implementation 'dev.ffmpegkit-maintained:ffmpeg-kit-full-gpl:7.1.6'
+}
